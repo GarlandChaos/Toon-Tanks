@@ -30,6 +30,9 @@ private:
 	UPROPERTY(EditDefaultsOnly, Category = "Combat")
 	UStaticMeshComponent* ProjectileMesh = nullptr;
 
+	UPROPERTY(EditAnywhere, Category = "Combat")
+	float Damage = 50.f;
+
 	UPROPERTY(VisibleAnywhere)
 	class UProjectileMovementComponent* ProjectileMovementComponent = nullptr;
 };
