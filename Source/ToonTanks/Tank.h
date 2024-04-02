@@ -29,6 +29,8 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+	void HandleDestruction();
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Movement")
 	float MovementSpeed = 0.f;
 
@@ -45,5 +47,5 @@ protected:
 	UPROPERTY(VisibleAnywhere, BluePrintReadOnly, Category = "Components")
 	class USpringArmComponent* SpringArmComponent = nullptr;
 
-	APlayerController* PlayerController = nullptr;
+	class AToonTanksPlayerController* ToonTanksPlayerController = nullptr;
 };

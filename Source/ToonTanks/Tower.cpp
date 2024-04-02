@@ -41,3 +41,9 @@ bool ATower::IsTargetWithinRange()
 
 	return DistanceFromTarget <= TargetRange;
 }
+
+void ATower::HandleDestruction()
+{
+	Super::HandleDestruction();
+	Destroy();
+}

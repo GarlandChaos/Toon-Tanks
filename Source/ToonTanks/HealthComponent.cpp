@@ -2,7 +2,10 @@
 
 
 #include "HealthComponent.h"
+#include "BasePawn.h"
+#include "ToonTanksGameMode.h"
 #include "Math/UnrealMathUtility.h"
+#include "Kismet/GameplayStatics.h"
 
 // Sets default values for this component's properties
 UHealthComponent::UHealthComponent()
@@ -23,6 +26,7 @@ void UHealthComponent::BeginPlay()
 	Health = MaxHealth;
 
 	GetOwner()->OnTakeAnyDamage.AddDynamic(this, &UHealthComponent::OnDamageTaken);
+	ToonTanksGameMode = Cast<AToonTanksGameMode>(UGameplayStatics::GetGameMode(this));
 }
 
 
@@ -36,13 +40,21 @@ void UHealthComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActo
 
 void UHealthComponent::OnDamageTaken(AActor* DamagedActor, float Damage, const UDamageType* DamageType, AController* Instigator, AActor* DamageCauser)
 {
-	UE_LOG(LogTemp, Warning, TEXT("OnDamageTaken: DamagedActor: %s, Damage: %f, Instigator: %s"), *DamagedActor->GetName(), Damage, *Instigator->GetName());
+	//UE_LOG(LogTemp, Warning, TEXT("OnDamageTaken: DamagedActor: %s, Damage: %f, Instigator: %s"), *DamagedActor->GetName(), Damage, *Instigator->GetName());
 
 	if (Damage <= 0.f || Health <= 0.f) return;
 
 	Health -= Damage;
 
 	Health = FMath::Clamp(Health, 0.f, MaxHealth);
-
 	UE_LOG(LogTemp, Warning, TEXT("DamagedActor: %s, Health: %f"), *DamagedActor->GetName(), Health);
+	
+	if (Health > 0.f) return;
+	if (!ToonTanksGameMode) return;
+
+	ABasePawn* DamagedPawn = Cast<ABasePawn>(DamagedActor);
+
+	if (!DamagedPawn) return;
+
+	ToonTanksGameMode->ActorDied(DamagedPawn);
 }

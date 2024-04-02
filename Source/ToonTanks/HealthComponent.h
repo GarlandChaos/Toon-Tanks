@@ -21,11 +21,10 @@ protected:
 	virtual void BeginPlay() override;
 
 private:
-
 	UPROPERTY(EditAnywhere)
 	float MaxHealth = 100.f;
-	
 	float Health = 0.f;
+	class AToonTanksGameMode* ToonTanksGameMode = nullptr;
 
 	UFUNCTION()
 	void OnDamageTaken(AActor* DamagedActor, float Damage, const UDamageType* DamageType, AController* Instigator, AActor* DamageCauser);
@@ -33,6 +32,4 @@ private:
 public:	
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
-
-		
 };

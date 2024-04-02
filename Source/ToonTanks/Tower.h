@@ -31,4 +31,6 @@ private:
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Combat")
 	float TargetRange = 0.f;
+
+	void HandleDestruction();
 };

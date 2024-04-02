@@ -2,6 +2,7 @@
 
 
 #include "Tank.h"
+#include "ToonTanksPlayerController.h"
 #include "Camera/CameraComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Kismet/GameplayStatics.h"
@@ -21,7 +22,7 @@ void ATank::BeginPlay()
 {
 	Super::BeginPlay();
 
-	PlayerController = Cast<APlayerController>(GetController());
+	ToonTanksPlayerController = GetController<AToonTanksPlayerController>();
 }
 
 // Called every frame
@@ -29,10 +30,10 @@ void ATank::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	if (!PlayerController) return;
+	if (!ToonTanksPlayerController) return;
 
 	FHitResult HitResult;
-	PlayerController->GetHitResultUnderCursor(ECollisionChannel::ECC_Visibility, false, HitResult);
+	ToonTanksPlayerController->GetHitResultUnderCursor(ECollisionChannel::ECC_Visibility, false, HitResult);
 
 	RotateTurret(HitResult.ImpactPoint);
 
@@ -47,6 +48,17 @@ void ATank::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 	PlayerInputComponent->BindAxis(TEXT("MoveForward"), this, &ATank::Move);
 	PlayerInputComponent->BindAxis(TEXT("Turn"), this, &ATank::Rotate);
 	PlayerInputComponent->BindAction(TEXT("Fire"), EInputEvent::IE_Pressed, this, &ATank::Fire);
+}
+
+void ATank::HandleDestruction()
+{
+	Super::HandleDestruction();
+	SetActorHiddenInGame(true);
+	SetActorTickEnabled(false);
+
+	ToonTanksPlayerController->SetPlayerEnabledState(false);
+	/*DisableInput(PlayerController);
+	PlayerController->bShowMouseCursor = false;*/
 }
 
 void ATank::Move(float Value)
