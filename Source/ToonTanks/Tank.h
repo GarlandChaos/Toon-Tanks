@@ -30,6 +30,7 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 	void HandleDestruction();
+	bool IsAlive();
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Movement")
 	float MovementSpeed = 0.f;
@@ -48,4 +49,7 @@ protected:
 	class USpringArmComponent* SpringArmComponent = nullptr;
 
 	class AToonTanksPlayerController* ToonTanksPlayerController = nullptr;
+
+private:
+	bool bIsAlive = true;
 };

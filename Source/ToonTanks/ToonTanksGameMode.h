@@ -21,12 +21,19 @@ protected:
 	UFUNCTION(BlueprintImplementableEvent)
 	void StartGame();
 
+	UFUNCTION(BlueprintImplementableEvent)
+	void EndGame(bool bWonGame);
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Start Game")
+	float StartGameDelay = 3.f;
+
 public:
 	void ActorDied(class ABasePawn* DeadPawn);
 
 private:
-	float StartGameDelay = 3.f;
 	class AToonTanksPlayerController* ToonTanksPlayerController = nullptr;
+	int32 TowerCount = 0;
 
 	void HandleGameStart();
+	int32 GetTowerCount();
 };

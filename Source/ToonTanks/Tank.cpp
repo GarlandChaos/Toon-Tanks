@@ -53,12 +53,16 @@ void ATank::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 void ATank::HandleDestruction()
 {
 	Super::HandleDestruction();
+
+	bIsAlive = false;
 	SetActorHiddenInGame(true);
 	SetActorTickEnabled(false);
-
 	ToonTanksPlayerController->SetPlayerEnabledState(false);
-	/*DisableInput(PlayerController);
-	PlayerController->bShowMouseCursor = false;*/
+}
+
+bool ATank::IsAlive()
+{
+	return bIsAlive;
 }
 
 void ATank::Move(float Value)

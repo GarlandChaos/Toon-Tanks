@@ -36,6 +36,8 @@ void ATower::CheckFireCondition()
 
 bool ATower::IsTargetWithinRange()
 {
+	if (!Tank->IsAlive()) return false;
+
 	FVector TargetLocation = Tank->GetActorLocation();
 	float DistanceFromTarget = FVector::Dist(GetActorLocation(), TargetLocation);
 

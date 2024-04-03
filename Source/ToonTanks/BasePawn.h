@@ -6,6 +6,8 @@
 #include "GameFramework/Pawn.h"
 #include "BasePawn.generated.h"
 
+class USoundBase;
+
 UCLASS()
 class TOONTANKS_API ABasePawn : public APawn
 {
@@ -39,18 +41,28 @@ protected:
 	void RotateTurret(FVector LookAtTarget);
 	void Fire();
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
+private:
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components", meta = (AllowPrivateAccess = "true"))
 	class UCapsuleComponent* CapsuleComponent = nullptr;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components", meta = (AllowPrivateAccess = "true"))
 	UStaticMeshComponent* BaseMesh = nullptr;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components", meta = (AllowPrivateAccess = "true"))
 	UStaticMeshComponent* TurretMesh = nullptr;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components", meta = (AllowPrivateAccess = "true"))
 	USceneComponent* ProjectileSpawnPoint = nullptr;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Combat")
 	TSubclassOf<class AProjectile> ProjectileClass = NULL;
+
+	UPROPERTY(EditAnywhere, Category = "Visual Effects")
+	class UParticleSystem* DeathParticleSystem = nullptr;
+
+	UPROPERTY(EditAnywhere, Category = "Visual Effects")
+	TSubclassOf<class UCameraShakeBase> DeathCameraShakeClass = nullptr;
+	
+	UPROPERTY(EditAnywhere, Category = "Sound Effects")
+	USoundBase* DeathSoundBase = nullptr;
 };
