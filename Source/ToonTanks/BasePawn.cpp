@@ -2,6 +2,7 @@
 
 
 #include "BasePawn.h"
+#include "ToonTanksGameMode.h"
 #include "Projectile.h"
 #include "Components/CapsuleComponent.h"
 #include "Kismet/GameplayStatics.h"
@@ -25,6 +26,13 @@ ABasePawn::ABasePawn()
 	ProjectileSpawnPoint->SetupAttachment(TurretMesh);
 }
 
+void ABasePawn::BeginPlay()
+{
+	Super::BeginPlay();
+
+	ToonTanksGameMode = Cast<AToonTanksGameMode>(UGameplayStatics::GetGameMode(this));
+}
+
 void ABasePawn::HandleDestruction()
 {
 	UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), DeathParticleSystem, GetActorLocation(), GetActorRotation());
@@ -34,6 +42,11 @@ void ABasePawn::HandleDestruction()
 
 void ABasePawn::RotateTurret(FVector LookAtTarget)
 {
+	if (ToonTanksGameMode->GetGameState() != EGameState::PLAYING)
+	{
+		return;
+	}
+
 	FVector Direction = LookAtTarget - TurretMesh->GetComponentLocation();
 	FRotator LookAtRotator = FRotator(0.f, Direction.Rotation().Yaw, 0.f);
 
@@ -43,6 +56,11 @@ void ABasePawn::RotateTurret(FVector LookAtTarget)
 
 void ABasePawn::Fire()
 {
+	if (ToonTanksGameMode->GetGameState() != EGameState::PLAYING)
+	{
+		return;
+	}
+
 	FVector ProjectileLocation = ProjectileSpawnPoint->GetComponentLocation();
 	FRotator ProjectileRotation = ProjectileSpawnPoint->GetComponentRotation();
 	FActorSpawnParameters SpawnParameters = FActorSpawnParameters();

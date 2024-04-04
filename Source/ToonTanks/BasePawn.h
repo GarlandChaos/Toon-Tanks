@@ -19,27 +19,14 @@ public:
 
 	virtual void HandleDestruction();
 
-	/*UPROPERTY(VisibleAnywhere)
-	int32 VisibleAnywhereInt = 5;
-
-	UPROPERTY(VisibleInstanceOnly)
-	float VisibleInstanceOnlyFloat = 5.5f;
-
-	UPROPERTY(VisibleDefaultsOnly)
-	int32 VisibleDefaultsOnlyInt = 20;
-
-	UPROPERTY(EditDefaultsOnly)
-	int32 EditDefaultsOnlyInt = 25;
-
-	UPROPERTY(EditInstanceOnly)
-	int32 EditInstanceOnlyInt = 30;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	float EditAnywhereFloat = 10.5f;*/
-
 protected:
+	// Called when the game starts or when spawned
+	virtual void BeginPlay() override;
+
 	void RotateTurret(FVector LookAtTarget);
 	void Fire();
+
+	class AToonTanksGameMode* ToonTanksGameMode = nullptr;
 
 private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components", meta = (AllowPrivateAccess = "true"))

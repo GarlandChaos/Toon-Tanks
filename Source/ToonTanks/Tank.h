@@ -17,15 +17,6 @@ class TOONTANKS_API ATank : public ABasePawn
 public:
 	ATank();
 
-protected:
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
-	void Move(float Value);
-	void Rotate(float Value);
-
-public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
@@ -42,14 +33,22 @@ public:
 	float TurretRotationSpeed = 0.f;
 
 protected:
+	// Called when the game starts or when spawned
+	virtual void BeginPlay() override;
+	
+	// Called every frame
+	virtual void Tick(float DeltaTime) override;
+	
+	void Move(float Value);
+	void Rotate(float Value);
+
 	UPROPERTY(VisibleAnywhere, BluePrintReadOnly, Category = "Components")
 	class UCameraComponent* CameraComponent = nullptr;
 
 	UPROPERTY(VisibleAnywhere, BluePrintReadOnly, Category = "Components")
 	class USpringArmComponent* SpringArmComponent = nullptr;
 
-	class AToonTanksPlayerController* ToonTanksPlayerController = nullptr;
-
 private:
 	bool bIsAlive = true;
+	class AToonTanksPlayerController* ToonTanksPlayerController = nullptr;
 };

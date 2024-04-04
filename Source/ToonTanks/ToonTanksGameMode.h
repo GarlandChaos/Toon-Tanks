@@ -9,14 +9,30 @@
 /**
  * 
  */
+
+enum class EGameState
+{
+	SETUP,
+	PLAYING,
+	PAUSED,
+	GAME_OVER
+};
+
 UCLASS()
 class TOONTANKS_API AToonTanksGameMode : public AGameModeBase
 {
 	GENERATED_BODY()
 
+public:
+	void ActorDied(class ABasePawn* DeadPawn);
+	EGameState GetGameState() const;
+
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void ShowMainMenu();
 
 	UFUNCTION(BlueprintImplementableEvent)
 	void StartGame();
@@ -27,13 +43,14 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Start Game")
 	float StartGameDelay = 3.f;
 
-public:
-	void ActorDied(class ABasePawn* DeadPawn);
+	UFUNCTION(BlueprintCallable)
+	void HandleGameStart();
 
 private:
 	class AToonTanksPlayerController* ToonTanksPlayerController = nullptr;
 	int32 TowerCount = 0;
+	EGameState CurrentGameState = EGameState::SETUP;
 
-	void HandleGameStart();
-	int32 GetTowerCount();
+	void SetGameState(EGameState NewGameState);
+	int32 GetTowerCount() const;
 };

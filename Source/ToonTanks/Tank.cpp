@@ -3,6 +3,7 @@
 
 #include "Tank.h"
 #include "ToonTanksPlayerController.h"
+#include "ToonTanksGameMode.h"
 #include "Camera/CameraComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Kismet/GameplayStatics.h"
@@ -69,6 +70,11 @@ void ATank::Move(float Value)
 {
 	//UE_LOG(LogTemp, Display, TEXT("%f"), Value);
 
+	if (ToonTanksGameMode->GetGameState() != EGameState::PLAYING)
+	{
+		return;
+	}
+
 	FVector DeltaLocation = FVector::ZeroVector;
 	DeltaLocation.X = Value * MovementSpeed * UGameplayStatics::GetWorldDeltaSeconds(this);
 	AddActorLocalOffset(DeltaLocation, true);
@@ -81,6 +87,11 @@ void ATank::Rotate(float Value)
 	//float AngleRad = FMath::DegreesToRadians(Value * RotationSpeed * UGameplayStatics::GetWorldDeltaSeconds(this));
 	//FQuat DeltaRotation(FVector::UpVector, AngleRad);
 	//AddActorLocalRotation(DeltaRotation, true);
+
+	if (ToonTanksGameMode->GetGameState() != EGameState::PLAYING)
+	{
+		return;
+	}
 
 	FRotator DeltaRotation = FRotator::ZeroRotator;
 	DeltaRotation.Yaw = Value * RotationSpeed * UGameplayStatics::GetWorldDeltaSeconds(this);

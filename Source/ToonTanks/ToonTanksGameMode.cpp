@@ -12,7 +12,8 @@ void AToonTanksGameMode::BeginPlay()
 {
 	Super::BeginPlay();
 
-	HandleGameStart();
+	ShowMainMenu();
+	//HandleGameStart();
 }
 
 void AToonTanksGameMode::ActorDied(ABasePawn* DeadPawn)
@@ -26,15 +27,23 @@ void AToonTanksGameMode::ActorDied(ABasePawn* DeadPawn)
 		if (TowerCount > 0) return;
 
 		EndGame(true);
+		CurrentGameState = EGameState::GAME_OVER;
 	}
 	else if (ATank* DeadTank = Cast<ATank>(DeadPawn))
 	{
 		EndGame(false);
+		CurrentGameState = EGameState::GAME_OVER;
 	}
+}
+
+EGameState AToonTanksGameMode::GetGameState() const
+{
+	return CurrentGameState;
 }
 
 void AToonTanksGameMode::HandleGameStart()
 {
+	CurrentGameState = EGameState::SETUP;
 	TowerCount = GetTowerCount();
 	ToonTanksPlayerController = Cast<AToonTanksPlayerController>(UGameplayStatics::GetPlayerController(this, 0));
 	
@@ -44,12 +53,21 @@ void AToonTanksGameMode::HandleGameStart()
 
 	ToonTanksPlayerController->SetPlayerEnabledState(false);
 
+	FTimerHandle SetupGameTimerHandle = FTimerHandle();
+	FTimerDelegate SetupGameTimerDelegate = FTimerDelegate::CreateUObject(ToonTanksPlayerController, &AToonTanksPlayerController::SetPlayerEnabledState, true);
+	GetWorldTimerManager().SetTimer(SetupGameTimerHandle, SetupGameTimerDelegate, StartGameDelay, false);
+
 	FTimerHandle StartGameTimerHandle = FTimerHandle();
-	FTimerDelegate StartGameTimerDelegate = FTimerDelegate::CreateUObject(ToonTanksPlayerController, &AToonTanksPlayerController::SetPlayerEnabledState, true);
+	FTimerDelegate StartGameTimerDelegate = FTimerDelegate::CreateUObject(this, &AToonTanksGameMode::SetGameState, EGameState::PLAYING);
 	GetWorldTimerManager().SetTimer(StartGameTimerHandle, StartGameTimerDelegate, StartGameDelay, false);
 }
 
-int32 AToonTanksGameMode::GetTowerCount()
+void AToonTanksGameMode::SetGameState(EGameState NewGameState)
+{
+	CurrentGameState = NewGameState;
+}
+
+int32 AToonTanksGameMode::GetTowerCount() const
 {
 	TArray<AActor*> Towers = TArray<AActor*>();
 	UGameplayStatics::GetAllActorsOfClass(this, ATower::StaticClass(), Towers);
