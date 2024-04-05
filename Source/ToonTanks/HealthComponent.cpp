@@ -38,6 +38,11 @@ void UHealthComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActo
 	// ...
 }
 
+float UHealthComponent::GetHealthNormalized()
+{
+	return Health / MaxHealth;
+}
+
 void UHealthComponent::OnDamageTaken(AActor* DamagedActor, float Damage, const UDamageType* DamageType, AController* Instigator, AActor* DamageCauser)
 {
 	//UE_LOG(LogTemp, Warning, TEXT("OnDamageTaken: DamagedActor: %s, Damage: %f, Instigator: %s"), *DamagedActor->GetName(), Damage, *Instigator->GetName());
