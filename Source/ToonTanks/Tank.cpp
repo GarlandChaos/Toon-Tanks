@@ -38,7 +38,7 @@ void ATank::Tick(float DeltaTime)
 
 	RotateTurret(HitResult.ImpactPoint);
 
-	DrawDebugSphere(GetWorld(), HitResult.ImpactPoint, 10.f, 12, FColor::Magenta);
+	//DrawDebugSphere(GetWorld(), HitResult.ImpactPoint, 10.f, 12, FColor::Magenta);
 }
 
 // Called to bind functionality to input
